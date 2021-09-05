@@ -126,21 +126,26 @@ def get_username():
 
     root.after(MILLISEC_PER_FRAME, update_mascot)
 
-    # create frame
-    input_frame = tkinter.Frame(root, bg = "white", width=window_width//2, height=window_height)
-    canvas.create_window(0, 0, window=input_frame, anchor=tkinter.NW)
-
     # define submit action
-    def submit():
+    def submit(event):
         nonlocal username
         username = entry.get()
         root.quit()
 
-    # create entry
-    tkinter.Label(input_frame, text="Username:").pack()
-    entry = tkinter.Entry(input_frame)
-    entry.pack()
-    tkinter.Button(input_frame, text='Go', command=submit).pack()
+    # username text
+    username_img = tkinter.PhotoImage(file='username.png')
+    canvas.create_image(130, 180, image=username_img, anchor=tkinter.NW)
+
+    # entry
+    entry = tkinter.Entry(canvas, width=17, font=("default", 15))
+    entry.place(x=145, y=240)
+
+    # go button
+    go_img = tkinter.PhotoImage(file='lets_go.png')
+    go_button = canvas.create_image(140, 285, image=go_img, anchor=tkinter.NW)
+    canvas.tag_bind(go_button, '<Button-1>', submit)
+
 
     root.mainloop()
     return username
+
