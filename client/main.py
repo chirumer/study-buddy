@@ -59,6 +59,10 @@ def get_username():
     root.geometry(f'{window_width}x{window_height}')
     root.title('Study Buddy')
 
+    # create canvas
+    canvas = tkinter.Canvas(root, width=window_width, height=window_height, highlightthickness=0)
+    canvas.place(x=0, y=0, relheight=1, relwidth=1)
+
     # load background image for window
     background_img = Image.open('background.jpg')
 
@@ -67,22 +71,22 @@ def get_username():
 
     # insert background image to window
     background_img = ImageTk.PhotoImage(background_img)
-    background_label = tkinter.Label(root, image=background_img)
-    background_label.place(x=0, y=0, relwidth=1, relheight=1)
+    canvas.create_image(0, 0, image=background_img, anchor=tkinter.NW)
 
 
+    # load mascot image
     mascot_img = Image.open('mascot.gif')
-    print(mascot_img.mode)
+    mascot_img = mascot_img.convert('RGBA')
+
+    # resize image
     mascot_img = resize_to_fit(mascot_img, int(window_width//2), window_height)
 
+    # insert mascot image to window
     mascot_img = ImageTk.PhotoImage(mascot_img)
-    mascot_label = tkinter.Label(root, image=mascot_img)
-    mascot_label.place(x=window_width//2, y=0)
+    canvas.create_image(window_width/2, 0, image=mascot_img, anchor=tkinter.NW)
 
     root.mainloop()
 
 
 username = get_username()
     # later: change to user authentication page
-
-
