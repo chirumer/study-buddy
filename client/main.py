@@ -3,20 +3,47 @@ from PIL import ImageTk, Image
 
 
 def resize_background(background_img, window_width, window_height):
-    img_w, img_h = background_img.size
-    img_aspct = img_w/img_h
-    needed_width_w = window_width - img_w
-    needed_width_h = (window_height - img_h) * img_aspct
-    new_width = (needed_width_w if needed_width_w > needed_width_h else
-                 needed_width_h) + img_w
-    new_height = int(new_width//img_aspct)
-    background_img = background_img.resize((new_width, new_height), Image.ANTIALIAS)
+    background_img = resize_to_spill(background_img, window_width, window_height)
     img_w, img_h = background_img.size
     background_img = background_img.crop((img_w/2 - window_width/2,
                                           img_h/2 - window_height/2,
                                           img_w/2 + window_width/2,
                                           img_h/2 + window_height/2))
     return background_img
+
+
+def resize_to_fit(img, width, height):
+
+    img_w, img_h = img.size
+    img_aspct = img_w / img_h
+
+    needed_width_w = width - img_w
+    needed_width_h = int((height - img_h) * img_aspct)
+
+    new_width = (needed_width_w if needed_width_w < needed_width_h else
+                 needed_width_h) + img_w
+    new_height = int(new_width//img_aspct)
+
+    img = img.resize((new_width, new_height), Image.ANTIALIAS)
+
+    return img
+
+
+def resize_to_spill(img, width, height):
+
+    img_w, img_h = img.size
+    img_aspct = img_w / img_h
+
+    needed_width_w = width - img_w
+    needed_width_h = int((height - img_h) * img_aspct)
+
+    new_width = (needed_width_w if needed_width_w > needed_width_h else
+                 needed_width_h) + img_w
+    new_height = int(new_width//img_aspct)
+
+    img = img.resize((new_width, new_height), Image.ANTIALIAS)
+
+    return img
 
 
 def get_username():
@@ -27,9 +54,10 @@ def get_username():
     aspect_ratio = window_width/window_height
         # later: handle user resizes
 
-    # set dimensions of window
+    # create window
     root = tkinter.Tk()
     root.geometry(f'{window_width}x{window_height}')
+    root.title('Study Buddy')
 
     # load background image for window
     background_img = Image.open('background.jpg')
@@ -42,8 +70,19 @@ def get_username():
     background_label = tkinter.Label(root, image=background_img)
     background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
+
+    mascot_img = Image.open('mascot.gif')
+    print(mascot_img.mode)
+    mascot_img = resize_to_fit(mascot_img, int(window_width//2), window_height)
+
+    mascot_img = ImageTk.PhotoImage(mascot_img)
+    mascot_label = tkinter.Label(root, image=mascot_img)
+    mascot_label.place(x=window_width//2, y=0)
+
     root.mainloop()
 
 
 username = get_username()
     # later: change to user authentication page
+
+
