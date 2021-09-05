@@ -1,9 +1,35 @@
 import tkinter
 from PIL import ImageTk, Image
 from PIL import ImageFilter
+import random
 
 
 MILLISEC_PER_FRAME = 50
+
+
+def popup_message(title, msg):
+    popup = tkinter.Tk()
+    popup.title(title)
+    label = tkinter.Label(popup, text=msg, wraplength=400, justify='center')
+    label.pack(side="top", fill="x", pady=10)
+    B1 = tkinter.Button(popup, text="Okay", command = popup.destroy)
+    B1.pack()
+    popup.mainloop()
+
+
+def fun_fact(event):
+
+    facts_file_name = 'facts.txt'
+    n_lines = 3080
+
+    random_line = random.randrange(0, n_lines)
+
+    facts_file = open(facts_file_name)
+
+    for i in range(random_line):
+        facts_file.readline()
+
+    popup_message('Fun Fact', facts_file.readline())
 
 
 def resize_background(background_img, window_width, window_height):
@@ -73,8 +99,8 @@ def load_mascots(canvas, window_width, window_height):
 
         canvas.itemconfigure(mascot, state='hidden')
 
-        canvas.tag_bind(mascot, '<Button-1>', lambda e: print(e.x, e.y))
-            # later: identify whether mascot was clicked
+        canvas.tag_bind(mascot, '<Button-1>', fun_fact)
+            # later: identify whether mascot was clicked or transparent background
 
     return mascot_images, mascots
 
@@ -148,4 +174,3 @@ def get_username():
 
     root.mainloop()
     return username
-
