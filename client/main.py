@@ -1,5 +1,6 @@
 import tkinter
 from PIL import ImageTk, Image
+from PIL import ImageFilter #
 
 
 def resize_background(background_img, window_width, window_height):
@@ -65,6 +66,7 @@ def get_username():
 
     # load background image for window
     background_img = Image.open('background.jpg')
+    background_img = background_img.filter(ImageFilter.BLUR)
 
     # resize and crop image to fit window
     background_img = resize_background(background_img, window_width, window_height)
@@ -73,17 +75,20 @@ def get_username():
     background_img = ImageTk.PhotoImage(background_img)
     canvas.create_image(0, 0, image=background_img, anchor=tkinter.NW)
 
-
     # load mascot image
     mascot_img = Image.open('mascot.gif')
     mascot_img = mascot_img.convert('RGBA')
+    mascot_img = mascot_img.filter(ImageFilter.BLUR)
 
     # resize image
     mascot_img = resize_to_fit(mascot_img, int(window_width//2), window_height)
 
     # insert mascot image to window
     mascot_img = ImageTk.PhotoImage(mascot_img)
-    canvas.create_image(window_width/2, 0, image=mascot_img, anchor=tkinter.NW)
+    mascot = canvas.create_image(window_width/2, 0, image=mascot_img, anchor=tkinter.NW)
+
+    canvas.tag_bind(mascot, '<Button-1>', lambda e: print(e.x, e.y))
+        # later: identify whether mascot was clicked
 
     root.mainloop()
 
