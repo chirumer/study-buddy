@@ -1,6 +1,9 @@
 import tkinter
 from PIL import ImageTk, Image
-from PIL import ImageFilter #
+from PIL import ImageFilter
+
+
+MILLISEC_PER_FRAME = 50
 
 
 def resize_background(background_img, window_width, window_height):
@@ -47,6 +50,34 @@ def resize_to_spill(img, width, height):
     return img
 
 
+def load_mascots(canvas, window_width, window_height):
+
+    mascot_images = []
+    mascots = []
+
+    # load mascot image
+    mascot_frames = Image.open('mascot.gif')
+
+    for frame in range(mascot_frames.n_frames):
+
+        mascot_frames.seek(frame)
+
+        mascot_img = resize_to_fit(mascot_frames, int(window_width//2), window_height)
+        mascot_img = mascot_img.convert('RGBA')
+        #mascot_img = mascot_img.filter(ImageFilter.BLUR)
+
+        mascot_img = ImageTk.PhotoImage(mascot_img)
+        mascot_images.append(mascot_img)
+        mascot = canvas.create_image(window_width/2, 0, image=mascot_img, anchor=tkinter.NW)
+        mascots.append(mascot)
+
+        canvas.itemconfigure(mascot, state='hidden')
+
+        canvas.tag_bind(mascot, '<Button-1>', lambda e: print(e.x, e.y))
+            # later: identify whether mascot was clicked
+
+    return mascot_images, mascots
+
 def get_username():
 
     username = ''
@@ -77,20 +108,23 @@ def get_username():
     background_img = ImageTk.PhotoImage(background_img)
     canvas.create_image(0, 0, image=background_img, anchor=tkinter.NW)
 
-    # load mascot image
-    mascot_img = Image.open('mascot.gif')
-    mascot_img = mascot_img.convert('RGBA')
-    mascot_img = mascot_img.filter(ImageFilter.BLUR)
+    # load mascot animation frames
+    mascot_images, mascots = load_mascots(canvas, window_width, window_height)
 
-    # resize image
-    mascot_img = resize_to_fit(mascot_img, int(window_width//2), window_height)
+    # display mascot
+    current_frame = 0
+    canvas.itemconfigure(mascots[current_frame], state='normal')
 
-    # insert mascot image to window
-    mascot_img = ImageTk.PhotoImage(mascot_img)
-    mascot = canvas.create_image(window_width/2, 0, image=mascot_img, anchor=tkinter.NW)
+    def update_mascot():
+        nonlocal current_frame
+        canvas.itemconfigure(mascots[current_frame], state='hidden')
+        current_frame += 1
+        if current_frame >= len(mascots):
+            current_frame = 0
+        canvas.itemconfigure(mascots[current_frame], state='normal')
+        root.after(MILLISEC_PER_FRAME, update_mascot)
 
-    canvas.tag_bind(mascot, '<Button-1>', lambda e: print(e.x, e.y))
-        # later: identify whether mascot was clicked
+    root.after(MILLISEC_PER_FRAME, update_mascot)
 
     # create frame
     input_frame = tkinter.Frame(root, bg = "white", width=window_width//2, height=window_height)
