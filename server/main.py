@@ -101,17 +101,14 @@ class Server():
 
             elif type == 'create':
                 parts = message.split('\n')
-                print(parts)
                 
                 title = parts[0][parts[0].find(':')+1:].strip()
                 tags = parts[1][parts[1].find(':')+1:].strip()
                 goals = parts[2][parts[2].find(':')+1:].strip()
 
-                print(title, tags, goals)
-
                 room = Room(title, tags, goals)
                 room.followers.add(client_username)
-                room.chat = 'Welcome to the chat!\nFeel free to participate!\n'
+                room.chat = '--> Discuss about the book here\n'
 
                 rooms.append(room)
 
@@ -142,7 +139,7 @@ class Server():
                 pos = message.find('\n')
                 room_number = int(message[:pos].split()[1])
 
-                message = message[pos+1:]
+                message = message[pos+1:].strip()
 
                 rooms[room_number].chat += f'[{client_username}]: {message}\n'
 
@@ -159,7 +156,7 @@ class Server():
 
         while True:
 
-            #try:
+            try:
                 # recieve data from user
                 data = client.recv(recv_size)
                 print(f'received: {data}')
@@ -170,12 +167,12 @@ class Server():
                         read()
 
                 else:
-                    raise error('disconnected')
+                    raise Error('disconnected')
 
-            #except:
-                # close the socket
-            #    client.close()
-            #    print('client socket closed\n')
+            except:
+                 close the socket
+                client.close()
+                print('client socket closed\n')
 
 
 
