@@ -1,4 +1,4 @@
-from base_window import Base_window
+from base_window import Base_window, popup_message
 import server_interface
 import tkinter
 
@@ -29,18 +29,74 @@ def username_page(base, temp_assets):
 
     def submit(event):
         username = entry.get()
-        temp_assets = []
+        temp_assets.clear()
         base.canvas.delete(username_txt)
         base.canvas.delete(go_btn)
         entry.destroy()
 
-        base.root.after(0, room_selection, username)
+        user_login(base, username, temp_assets)
 
     base.canvas.tag_bind(go_btn, '<Button-1>', submit)
 
 
-def room_selection(username):
-    print(username)
+def user_login(base, username, temp_assets):
+
+    is_success = server_interface.login(username)
+
+    if not is_success:
+            # later: implement error handling
+        pass
+
+    category_selection_page(base, temp_assets)
+
+
+def category_selection_page(base, temp_assets):
+
+    def cleanup():
+        temp_assets.clear()
+        base.canvas.delete(existing_btn)
+        base.canvas.delete(create_btn)
+        base.canvas.delete(join_btn)
+
+    existing_img = tkinter.PhotoImage(file='study_existing.png')
+    temp_assets.append(existing_img)
+    existing_btn = base.canvas.create_image(130, 90, image=existing_img, anchor=tkinter.NW)
+
+    def clicked_existing(event):
+        cleanup()
+        existing_page(base, temp_assets)
+
+    base.canvas.tag_bind(existing_btn, '<Button-1>', clicked_existing)
+
+    create_img = tkinter.PhotoImage(file='study_create.png')
+    temp_assets.append(create_img)
+    create_btn = base.canvas.create_image(147, 220, image=create_img, anchor=tkinter.NW)
+
+    def clicked_create(event):
+        cleanup()
+        create_page(base, temp_assets)
+
+    base.canvas.tag_bind(create_btn, '<Button-1>', clicked_create)
+
+    join_img = tkinter.PhotoImage(file='study_join.png')
+    temp_assets.append(join_img)
+    join_btn = base.canvas.create_image(150, 370, image=join_img, anchor=tkinter.NW)
+
+    def clicked_join(event):
+        cleanup()
+        join_page(base, temp_assets)
+
+    base.canvas.tag_bind(join_btn, '<Button-1>', clicked_join)
+
+
+def existing_page(base, temp_assets):
+    print('existing page')
+
+def create_page(base, temp_assets):
+    print('create page')
+
+def join_page(base, temp_assets):
+    print('join page')
 
 
 

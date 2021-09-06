@@ -13,6 +13,7 @@ class Base_window():
 
         self.root = tkinter.Tk()
         self.root.geometry(f"{parameters['window_width']}x{parameters['window_height']}")
+        self.root.resizable(False, False)
         self.root.title(parameters['window_title'])
 
         self.canvas = tkinter.Canvas(self.root, width=parameters['window_width'],
