@@ -6,6 +6,7 @@ import random
 
 class Base_window():
 
+
     def __init__(self, parameters):
 
         self.parameters = parameters
@@ -25,8 +26,6 @@ class Base_window():
         self.current_frame = 0
         self.canvas.itemconfigure(self.mascot_ids[self.current_frame], state='normal')
         self.root.after(parameters['MILLISEC_PER_FRAME'], self._update_mascot)
-
-        self.root.mainloop()
 
 
     def _resize_background(self, background_img):
