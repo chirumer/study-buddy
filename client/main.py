@@ -105,7 +105,18 @@ def category_selection_page(base, temp_assets):
 
 
 def existing_page(base, temp_assets):
-    print('existing page')
+    groups = server_interface.get_groups()
+
+    chat = server_interface.get_chat(0)
+    print(chat)
+    print('end')
+
+    server_interface.send_chat(0, 'hi there\n')
+
+    chat = server_interface.get_chat(0)
+    print(chat)
+    print('end')
+
 
 def create_page(base, temp_assets):
 
