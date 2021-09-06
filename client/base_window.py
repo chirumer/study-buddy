@@ -1,7 +1,7 @@
+from helpers import resize_to_fit, resize_to_spill, popup_message, fun_fact, crop_center_align
 import tkinter
 from PIL import ImageTk, Image
 from PIL import ImageFilter
-import random
 
 
 class Base_window():
@@ -35,11 +35,8 @@ class Base_window():
         height = self.parameters['window_height']
 
         background_img = resize_to_spill(background_img, width, height)
-        img_w, img_h = background_img.size
-        background_img = background_img.crop((img_w/2 - width/2,
-                                              img_h/2 - height/2,
-                                              img_w/2 + width/2,
-                                              img_h/2 + height/2))
+        background_img = crop_center_align(background_img, width, height)
+
         return background_img
 
 
@@ -90,63 +87,3 @@ class Base_window():
             self.current_frame = 0
         self.canvas.itemconfigure(self.mascot_ids[self.current_frame], state='normal')
         self.root.after(self.parameters['MILLISEC_PER_FRAME'], self._update_mascot)
-
-
-
-def resize_to_fit(img, width, height):
-
-    img_w, img_h = img.size
-    img_aspct = img_w / img_h
-
-    needed_width_w = width - img_w
-    needed_width_h = int((height - img_h) * img_aspct)
-
-    new_width = (needed_width_w if needed_width_w < needed_width_h else
-                 needed_width_h) + img_w
-    new_height = int(new_width//img_aspct)
-
-    img = img.resize((new_width, new_height), Image.ANTIALIAS)
-
-    return img
-
-
-def resize_to_spill(img, width, height):
-
-    img_w, img_h = img.size
-    img_aspct = img_w / img_h
-
-    needed_width_w = width - img_w
-    needed_width_h = int((height - img_h) * img_aspct)
-
-    new_width = (needed_width_w if needed_width_w > needed_width_h else
-                 needed_width_h) + img_w
-    new_height = int(new_width//img_aspct)
-
-    img = img.resize((new_width, new_height), Image.ANTIALIAS)
-
-    return img
-
-
-def popup_message(title, msg):
-    popup = tkinter.Tk()
-    popup.title(title)
-    label = tkinter.Label(popup, text=msg, wraplength=400, justify='center')
-    label.pack(side="top", fill="x", pady=10)
-    B1 = tkinter.Button(popup, text="Okay", command = popup.destroy)
-    B1.pack()
-    popup.mainloop()
-
-
-def fun_fact(event):
-
-    facts_file_name = 'facts.txt'
-    n_lines = 3080
-
-    random_line = random.randrange(0, n_lines)
-
-    facts_file = open(facts_file_name)
-
-    for i in range(random_line):
-        facts_file.readline()
-
-    popup_message('Fun Fact', facts_file.readline())
