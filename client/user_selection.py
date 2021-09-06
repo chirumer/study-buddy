@@ -6,6 +6,12 @@ import random
 
 MILLISEC_PER_FRAME = 50
 
+root = None 
+canvas = None
+mascot_images = None
+mascots = None
+background_img = None
+
 
 def popup_message(title, msg):
     popup = tkinter.Tk()
@@ -30,6 +36,55 @@ def fun_fact(event):
         facts_file.readline()
 
     popup_message('Fun Fact', facts_file.readline())
+
+
+def init_window():
+
+    global root, canvas, mascot_images, mascots, background_img
+
+    # constants
+    window_width = 1000
+    window_height = 500
+    aspect_ratio = window_width/window_height
+        # later: handle user resizes
+
+    # create window
+    root = tkinter.Tk()
+    root.geometry(f'{window_width}x{window_height}')
+    root.title('Study Buddy')
+
+    # create canvas
+    canvas = tkinter.Canvas(root, width=window_width, height=window_height, highlightthickness=0)
+    canvas.place(x=0, y=0, relheight=1, relwidth=1)
+
+    # load background image for window
+    background_img = Image.open('background.jpg')
+    background_img = background_img.filter(ImageFilter.BLUR)
+
+    # resize and crop image to fit window
+    background_img = resize_background(background_img, window_width, window_height)
+
+    # insert background image to window
+    background_img = ImageTk.PhotoImage(background_img)
+    canvas.create_image(0, 0, image=background_img, anchor=tkinter.NW)
+
+    # load mascot animation frames
+    mascot_images, mascots = load_mascots(canvas, window_width, window_height)
+
+    # display mascot
+    current_frame = 0
+    canvas.itemconfigure(mascots[current_frame], state='normal')
+
+    def update_mascot():
+        nonlocal current_frame
+        canvas.itemconfigure(mascots[current_frame], state='hidden')
+        current_frame += 1
+        if current_frame >= len(mascots):
+            current_frame = 0
+        canvas.itemconfigure(mascots[current_frame], state='normal')
+        root.after(MILLISEC_PER_FRAME, update_mascot)
+
+    root.after(MILLISEC_PER_FRAME, update_mascot)
 
 
 def resize_background(background_img, window_width, window_height):
@@ -108,59 +163,18 @@ def get_username():
 
     username = ''
 
-    # constants
-    window_width = 1000
-    window_height = 500
-    aspect_ratio = window_width/window_height
-        # later: handle user resizes
-
-    # create window
-    root = tkinter.Tk()
-    root.geometry(f'{window_width}x{window_height}')
-    root.title('Study Buddy')
-
-    # create canvas
-    canvas = tkinter.Canvas(root, width=window_width, height=window_height, highlightthickness=0)
-    canvas.place(x=0, y=0, relheight=1, relwidth=1)
-
-    # load background image for window
-    background_img = Image.open('background.jpg')
-    background_img = background_img.filter(ImageFilter.BLUR)
-
-    # resize and crop image to fit window
-    background_img = resize_background(background_img, window_width, window_height)
-
-    # insert background image to window
-    background_img = ImageTk.PhotoImage(background_img)
-    canvas.create_image(0, 0, image=background_img, anchor=tkinter.NW)
-
-    # load mascot animation frames
-    mascot_images, mascots = load_mascots(canvas, window_width, window_height)
-
-    # display mascot
-    current_frame = 0
-    canvas.itemconfigure(mascots[current_frame], state='normal')
-
-    def update_mascot():
-        nonlocal current_frame
-        canvas.itemconfigure(mascots[current_frame], state='hidden')
-        current_frame += 1
-        if current_frame >= len(mascots):
-            current_frame = 0
-        canvas.itemconfigure(mascots[current_frame], state='normal')
-        root.after(MILLISEC_PER_FRAME, update_mascot)
-
-    root.after(MILLISEC_PER_FRAME, update_mascot)
-
     # define submit action
     def submit(event):
         nonlocal username
         username = entry.get()
-        root.quit()
+        entry.destroy()
+        canvas.delete(go_button)
+        canvas.delete(username_text)
+
 
     # username text
     username_img = tkinter.PhotoImage(file='username.png')
-    canvas.create_image(130, 180, image=username_img, anchor=tkinter.NW)
+    username_text = canvas.create_image(130, 180, image=username_img, anchor=tkinter.NW)
 
     # entry
     entry = tkinter.Entry(canvas, width=17, font=("default", 15))
