@@ -173,6 +173,7 @@ class Server():
                 # close the socket
                 client.close()
                 print('client socket closed\n')
+                break
 
 
 
