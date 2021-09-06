@@ -203,11 +203,25 @@ def create_page(base, temp_assets):
 def join_page(base, temp_assets):
 
     def cleanup():
-        pass
+        temp_assets.clear()
+        txt_imgs.clear()
+
+        for detail_btn in detail_btns:
+            base.canvas.delete(detail_btn)
+
+        for join_btn in join_btns:
+            base.canvas.delete(join_btn)
+
+        for joined_txt in joined_txts:
+            base.canvas.delete(joined_txt)
+
+        for empty_txt in empty_txts:
+            base.canvas.delete(empty_txt)
+
 
     def create_text_image(canvas, text, index, txt_imgs, txt_ids):
 
-        img = Image.new('RGBA', (400, 80), (0, 255, 0, 0))
+        img = Image.new('RGBA', (400, 30), (0, 255, 0, 0))
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype('montserrat.otf', 25)
 
@@ -232,6 +246,59 @@ def join_page(base, temp_assets):
             txt_ids.append(canvas.create_image(100, 360, image=img, anchor=tkinter.NW))
 
         return img
+
+    def clear_page():
+
+        for detail_btn in detail_btns:
+            base.canvas.itemconfigure(detail_btn, state='hidden')
+
+        for join_btn in join_btns:
+            base.canvas.itemconfigure(join_btn, state='hidden')
+
+        for joined_txt in joined_txts:
+            base.canvas.itemconfigure(joined_txt, state='hidden')
+
+        for empty_txt in empty_txts:
+            base.canvas.itemconfigure(empty_txt, state='hidden')
+
+        for txt_id in txt_ids:
+            base.canvas.delete(txt_id)
+
+        txt_imgs.clear()
+
+
+    def display_page(page_number, groups):
+
+        clear_page()
+
+        items = groups[4*page_number:4*(page_number+1)]
+
+        i = -1
+
+        for i in range(len(items)):
+
+            base.canvas.itemconfigure(detail_btns[i], state='normal')
+
+            if items[i].is_member == 'yes':
+                base.canvas.itemconfigure(joined_txts[i], state='normal')
+            else:
+                base.canvas.itemconfigure(join_btns[i], state='normal')
+
+                def gen(i):
+                    def clicked_join(event):
+                        server_interface.join_chat(4*page_number+i)
+                        base.canvas.itemconfigure(join_btns[i], state='hidden')
+                        base.canvas.itemconfigure(joined_txts[i], state='normal')
+                    return clicked_join
+
+                base.canvas.tag_bind(join_btns[i], '<Button-1>', gen(i))
+
+
+            create_text_image(base.canvas, items[i].title, i, txt_imgs, txt_ids)
+
+        for i in range(i+1, 4):
+            base.canvas.itemconfigure(empty_txts[i], state='normal')
+
 
     tile_img = Image.open('tile.jpeg')
     tile_img = resize_to_spill(tile_img, 400, 80)
@@ -299,9 +366,25 @@ def join_page(base, temp_assets):
     temp_assets.append(right_img)
     right_btn = base.canvas.create_image(510, 250, image=right_img, anchor=tkinter.NW)
 
+    def clicked_right(event):
+        nonlocal current_page_number, groups
+        current_page_number += 1
+
+        display_page(current_page_number, groups)
+
+    base.canvas.tag_bind(right_btn, '<Button-1>', clicked_right)
+
     left_img = tkinter.PhotoImage(file='left.png')
     temp_assets.append(left_img)
     left_btn = base.canvas.create_image(30, 250, image=left_img, anchor=tkinter.NW)
+
+    def clicked_left(event):
+        nonlocal current_page_number, groups
+        current_page_number -= 1
+
+        display_page(current_page_number, groups)
+
+    base.canvas.tag_bind(left_btn, '<Button-1>', clicked_left)
 
     back_img = tkinter.PhotoImage(file='back.png')
     temp_assets.append(back_img)
@@ -312,6 +395,10 @@ def join_page(base, temp_assets):
         category_selection_page(base, temp_assets)
 
     base.canvas.tag_bind(back_btn, '<Button-1>', clicked_back)
+
+    groups = server_interface.get_groups()
+    current_page_number = 0
+    display_page(current_page_number, groups)
 
 
 if __name__ == '__main__':

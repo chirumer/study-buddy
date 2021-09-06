@@ -51,9 +51,9 @@ def get_groups():
             buffer += data
 
     decoded_buffer = buffer.decode()
-    parts = decoded_buffer.split()
-    parts = parts[2:]
-    print(parts)
+    parts = decoded_buffer.split('\n')
+    parts = parts[1:]
+    parts = [part for part in parts if part]
 
     groups = []
 
@@ -86,6 +86,15 @@ def get_chat(room_number):
     chat = decoded_buffer[pos+1:]
 
     return chat
+
+def join_chat(room_number):
+
+    recv_size = 1024
+
+    load = ('type: join\n'
+           f'room_number: {room_number}')
+
+    sock.send((f'size: {len(load)}\n' + load).encode())
 
 def send_chat(room_number, message):
 

@@ -100,11 +100,14 @@ class Server():
                 client_username = message.split()[1]
 
             elif type == 'create':
-                parts = message.split()
+                parts = message.split('\n')
+                print(parts)
                 
-                title = parts[1]
-                tags = parts[3]
-                goals = parts[5]
+                title = parts[0][parts[0].find(':')+1:].strip()
+                tags = parts[1][parts[1].find(':')+1:].strip()
+                goals = parts[2][parts[2].find(':')+1:].strip()
+
+                print(title, tags, goals)
 
                 room = Room(title, tags, goals)
                 room.followers.add(client_username)
@@ -142,6 +145,10 @@ class Server():
                 message = message[pos+1:]
 
                 rooms[room_number].chat += f'[{client_username}]: {message}\n'
+
+            elif type == 'join':
+                room_number = int(message.split()[1])
+                rooms[room_number].followers.add(client_username)
 
 
 
