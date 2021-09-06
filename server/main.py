@@ -170,7 +170,7 @@ class Server():
                     raise Error('disconnected')
 
             except:
-                 close the socket
+                # close the socket
                 client.close()
                 print('client socket closed\n')
 
