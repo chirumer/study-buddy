@@ -270,19 +270,40 @@ def join_page(base, temp_assets):
 
             base.canvas.itemconfigure(detail_btns[i], state='normal')
 
+            def gen_detail(i):
+                def clicked_details(event):
+                    title = items[i].title
+                    tags = items[i].tags
+                    goals = items[i].goals
+
+                    details = tkinter.Tk()
+                    details.title('group details')
+                    label = tkinter.Label(details, text=f'title: {title}', wraplength=400, justify='center')
+                    label.pack()
+                    label2 = tkinter.Label(details, text=f'tags: {tags}', wraplength=400, justify='center')
+                    label2.pack()
+                    label3 = tkinter.Label(details, text=f'goals: {goals}', wraplength=400, justify='center')
+                    label3.pack()
+
+                    details.mainloop()
+
+                return clicked_details
+
+            base.canvas.tag_bind(detail_btns[i], '<Button-1>', gen_detail(i))
+
             if items[i].is_member == 'yes':
                 base.canvas.itemconfigure(joined_txts[i], state='normal')
             else:
                 base.canvas.itemconfigure(join_btns[i], state='normal')
 
-                def gen(i):
+                def gen_join(i):
                     def clicked_join(event):
                         server_interface.join_chat(4*page_number+i)
                         base.canvas.itemconfigure(join_btns[i], state='hidden')
                         base.canvas.itemconfigure(joined_txts[i], state='normal')
                     return clicked_join
 
-                base.canvas.tag_bind(join_btns[i], '<Button-1>', gen(i))
+                base.canvas.tag_bind(join_btns[i], '<Button-1>', gen_join(i))
 
 
             create_text_image(base.canvas, items[i].title, i, txt_imgs, txt_ids)
@@ -388,19 +409,6 @@ def join_page(base, temp_assets):
     current_page_number = 0
     display_page(current_page_number, groups)
 
-# def existing_page(base, temp_assets):
-#     groups = server_interface.get_groups()
-# 
-#     chat = server_interface.get_chat(0)
-#     print(chat)
-#     print('end')
-# 
-#     server_interface.send_chat(0, 'hi there\n')
-# 
-#     chat = server_interface.get_chat(0)
-#     print(chat)
-#     print('end')
-
 def existing_page(base, temp_assets):
 
     def cleanup():
@@ -473,6 +481,28 @@ def existing_page(base, temp_assets):
         for i in range(len(items)):
 
             base.canvas.itemconfigure(detail_btns[i], state='normal')
+
+            def gen_detail(i):
+                def clicked_details(event):
+                    title = items[i][0].title
+                    tags = items[i][0].tags
+                    goals = items[i][0].goals
+
+                    details = tkinter.Tk()
+                    details.title('group details')
+                    label = tkinter.Label(details, text=f'title: {title}', wraplength=400, justify='center')
+                    label.pack()
+                    label2 = tkinter.Label(details, text=f'tags: {tags}', wraplength=400, justify='center')
+                    label2.pack()
+                    label3 = tkinter.Label(details, text=f'goals: {goals}', wraplength=400, justify='center')
+                    label3.pack()
+
+                    details.mainloop()
+
+                return clicked_details
+
+            base.canvas.tag_bind(detail_btns[i], '<Button-1>', gen_detail(i))
+
             base.canvas.itemconfigure(open_btns[i], state='normal')
             
             def gen(i):
