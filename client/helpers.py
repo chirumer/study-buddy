@@ -59,7 +59,7 @@ def popup_message(title, msg):
 
 def fun_fact(event):
 
-    facts_file_name = 'facts.txt'
+    facts_file_name = 'assets/facts.txt'
     n_lines = 3080
 
     random_line = random.randrange(0, n_lines)

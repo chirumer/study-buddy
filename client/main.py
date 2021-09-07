@@ -8,8 +8,8 @@ username = ''
 
 parameters = {
     'MILLISEC_PER_FRAME': 50,
-    'mascot_path': 'mascot.gif',
-    'background_path': 'background.jpg',
+    'mascot_path': 'assets/mascot.gif',
+    'background_path': 'assets/background.jpg',
     'window_width': 1000,
     'window_height': 500,
     'window_title': 'Study Buddy'
@@ -31,14 +31,14 @@ def username_page(base, temp_assets):
             return "Empty username"
         return True
 
-    username_img = tkinter.PhotoImage(file='username.png')
+    username_img = tkinter.PhotoImage(file='assets/username.png')
     temp_assets.append(username_img)
     username_txt = base.canvas.create_image(130, 180, image=username_img, anchor=tkinter.NW)
 
     entry = tkinter.Entry(base.canvas, width=17, font=('default', 15))
     entry.place(x=145, y=240)
 
-    go_img = tkinter.PhotoImage(file='lets_go.png')
+    go_img = tkinter.PhotoImage(file='assets/lets_go.png')
     temp_assets.append(go_img)
     go_btn = base.canvas.create_image(140, 285, image=go_img, anchor=tkinter.NW)
 
@@ -77,7 +77,7 @@ def category_selection_page(base, temp_assets):
         base.canvas.delete(create_btn)
         base.canvas.delete(join_btn)
 
-    existing_img = tkinter.PhotoImage(file='study_existing.png')
+    existing_img = tkinter.PhotoImage(file='assets/study_existing.png')
     temp_assets.append(existing_img)
     existing_btn = base.canvas.create_image(130, 90, image=existing_img, anchor=tkinter.NW)
 
@@ -87,7 +87,7 @@ def category_selection_page(base, temp_assets):
 
     base.canvas.tag_bind(existing_btn, '<Button-1>', clicked_existing)
 
-    create_img = tkinter.PhotoImage(file='study_create.png')
+    create_img = tkinter.PhotoImage(file='assets/study_create.png')
     temp_assets.append(create_img)
     create_btn = base.canvas.create_image(147, 220, image=create_img, anchor=tkinter.NW)
 
@@ -97,7 +97,7 @@ def category_selection_page(base, temp_assets):
 
     base.canvas.tag_bind(create_btn, '<Button-1>', clicked_create)
 
-    join_img = tkinter.PhotoImage(file='study_join.png')
+    join_img = tkinter.PhotoImage(file='assets/study_join.png')
     temp_assets.append(join_img)
     join_btn = base.canvas.create_image(150, 370, image=join_img, anchor=tkinter.NW)
 
@@ -131,28 +131,28 @@ def create_page(base, temp_assets):
             return "Empty goals field!"
         return True
 
-    book_title_img = tkinter.PhotoImage(file='book_title.png')
+    book_title_img = tkinter.PhotoImage(file='assets/book_title.png')
     temp_assets.append(book_title_img)
     book_title_txt = base.canvas.create_image(80, 30, image=book_title_img, anchor=tkinter.NW)
 
     title_entry = tkinter.Entry(base.canvas, width=17, font=('default', 15))
     title_entry.place(x=90, y=90)
 
-    tags_entry_img = tkinter.PhotoImage(file='tags.png')
+    tags_entry_img = tkinter.PhotoImage(file='assets/tags.png')
     temp_assets.append(tags_entry_img)
     tags_entry_txt= base.canvas.create_image(80, 150, image=tags_entry_img, anchor=tkinter.NW)
 
     tags_entry = tkinter.Text(base.canvas, width=17, height=2, font=('default', 15))
     tags_entry.place(x=90, y=205)
 
-    goals_img = tkinter.PhotoImage(file='group_goals.png')
+    goals_img = tkinter.PhotoImage(file='assets/group_goals.png')
     temp_assets.append(goals_img)
     goals_txt = base.canvas.create_image(80, 280, image=goals_img, anchor=tkinter.NW)
 
     goals_entry = tkinter.Text(base.canvas, width=20, height=5, font=('default', 15))
     goals_entry.place(x=90, y=340)
 
-    create_img = tkinter.PhotoImage(file='study_create.png')
+    create_img = tkinter.PhotoImage(file='assets/study_create.png')
     temp_assets.append(create_img)
     create_btn = base.canvas.create_image(400, 190, image=create_img, anchor=tkinter.NW)
 
@@ -179,7 +179,7 @@ def create_page(base, temp_assets):
 
     base.canvas.tag_bind(create_btn, '<Button-1>', clicked_create)
 
-    back_img = tkinter.PhotoImage(file='back.png')
+    back_img = tkinter.PhotoImage(file='assets/back.png')
     temp_assets.append(back_img)
     back_btn = base.canvas.create_image(900, 20, image=back_img, anchor=tkinter.NW)
 
@@ -214,7 +214,7 @@ def join_page(base, temp_assets):
 
         img = Image.new('RGBA', (400, 30), (0, 255, 0, 0))
         draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype('montserrat.otf', 25)
+        font = ImageFont.truetype('assets/montserrat.otf', 25)
 
         if draw.textsize(text, font=font)[0] > 300:
             while draw.textsize(text + '..', font=font)[0] > 300:
@@ -291,22 +291,22 @@ def join_page(base, temp_assets):
             base.canvas.itemconfigure(empty_txts[i], state='normal')
 
 
-    tile_img = Image.open('tile.jpeg')
+    tile_img = Image.open('assets/tile.jpeg')
     tile_img = resize_to_spill(tile_img, 400, 80)
     tile_img = crop_center_align(tile_img, 400, 80)
     tile_img = ImageTk.PhotoImage(tile_img)
     temp_assets.append(tile_img)
 
-    join_img = tkinter.PhotoImage(file='join_group.png')
+    join_img = tkinter.PhotoImage(file='assets/join_group.png')
     temp_assets.append(join_img)
 
-    details_img = tkinter.PhotoImage(file='details.png')
+    details_img = tkinter.PhotoImage(file='assets/details.png')
     temp_assets.append(details_img)
 
-    already_img = tkinter.PhotoImage(file='already_joined.png')
+    already_img = tkinter.PhotoImage(file='assets/already_joined.png')
     temp_assets.append(already_img)
 
-    empty_img = tkinter.PhotoImage(file='empty.png')
+    empty_img = tkinter.PhotoImage(file='assets/empty.png')
     temp_assets.append(empty_img)
 
     
@@ -350,7 +350,7 @@ def join_page(base, temp_assets):
     create_text_image(base.canvas, text, 2, txt_imgs, txt_ids)
     create_text_image(base.canvas, text, 3, txt_imgs, txt_ids)
 
-    right_img = tkinter.PhotoImage(file='right.png')
+    right_img = tkinter.PhotoImage(file='assets/right.png')
     temp_assets.append(right_img)
     right_btn = base.canvas.create_image(510, 250, image=right_img, anchor=tkinter.NW)
 
@@ -362,7 +362,7 @@ def join_page(base, temp_assets):
 
     base.canvas.tag_bind(right_btn, '<Button-1>', clicked_right)
 
-    left_img = tkinter.PhotoImage(file='left.png')
+    left_img = tkinter.PhotoImage(file='assets/left.png')
     temp_assets.append(left_img)
     left_btn = base.canvas.create_image(30, 250, image=left_img, anchor=tkinter.NW)
 
@@ -374,7 +374,7 @@ def join_page(base, temp_assets):
 
     base.canvas.tag_bind(left_btn, '<Button-1>', clicked_left)
 
-    back_img = tkinter.PhotoImage(file='back.png')
+    back_img = tkinter.PhotoImage(file='assets/back.png')
     temp_assets.append(back_img)
     back_btn = base.canvas.create_image(900, 20, image=back_img, anchor=tkinter.NW)
 
@@ -421,7 +421,7 @@ def existing_page(base, temp_assets):
 
         img = Image.new('RGBA', (400, 30), (0, 255, 0, 0))
         draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype('montserrat.otf', 25)
+        font = ImageFont.truetype('assets/montserrat.otf', 25)
 
         if draw.textsize(text, font=font)[0] > 300:
             while draw.textsize(text + '..', font=font)[0] > 300:
@@ -488,19 +488,19 @@ def existing_page(base, temp_assets):
             base.canvas.itemconfigure(empty_txts[i], state='normal')
 
 
-    tile_img = Image.open('tile.jpeg')
+    tile_img = Image.open('assets/tile.jpeg')
     tile_img = resize_to_spill(tile_img, 400, 80)
     tile_img = crop_center_align(tile_img, 400, 80)
     tile_img = ImageTk.PhotoImage(tile_img)
     temp_assets.append(tile_img)
 
-    open_img = tkinter.PhotoImage(file='open.png')
+    open_img = tkinter.PhotoImage(file='assets/open.png')
     temp_assets.append(open_img)
 
-    details_img = tkinter.PhotoImage(file='details.png')
+    details_img = tkinter.PhotoImage(file='assets/details.png')
     temp_assets.append(details_img)
 
-    empty_img = tkinter.PhotoImage(file='empty.png')
+    empty_img = tkinter.PhotoImage(file='assets/empty.png')
     temp_assets.append(empty_img)
 
     
@@ -538,7 +538,7 @@ def existing_page(base, temp_assets):
     create_text_image(base.canvas, text, 2, txt_imgs, txt_ids)
     create_text_image(base.canvas, text, 3, txt_imgs, txt_ids)
 
-    right_img = tkinter.PhotoImage(file='right.png')
+    right_img = tkinter.PhotoImage(file='assets/right.png')
     temp_assets.append(right_img)
     right_btn = base.canvas.create_image(510, 250, image=right_img, anchor=tkinter.NW)
 
@@ -550,7 +550,7 @@ def existing_page(base, temp_assets):
 
     base.canvas.tag_bind(right_btn, '<Button-1>', clicked_right)
 
-    left_img = tkinter.PhotoImage(file='left.png')
+    left_img = tkinter.PhotoImage(file='assets/left.png')
     temp_assets.append(left_img)
     left_btn = base.canvas.create_image(30, 250, image=left_img, anchor=tkinter.NW)
 
@@ -562,7 +562,7 @@ def existing_page(base, temp_assets):
 
     base.canvas.tag_bind(left_btn, '<Button-1>', clicked_left)
 
-    back_img = tkinter.PhotoImage(file='back.png')
+    back_img = tkinter.PhotoImage(file='assets/back.png')
     temp_assets.append(back_img)
     back_btn = base.canvas.create_image(900, 20, image=back_img, anchor=tkinter.NW)
 
