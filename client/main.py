@@ -3,6 +3,8 @@ from helpers import resize_to_fit, resize_to_spill, popup_message, crop_center_a
 import server_interface
 import tkinter
 from PIL import ImageTk, Image, ImageFont, ImageDraw
+import time
+import threading
 
 username = ''
 
@@ -65,6 +67,18 @@ def user_login(base, username, temp_assets):
             # later: implement error handling
         poppup_message('Alert!', 'socket error')
         return
+
+    def say_hi(base):
+        print('reached')
+        hi_img = tkinter.PhotoImage(file='assets/hi.png')
+        temp_assets.append(hi_img)
+        hi_txt = base.canvas.create_image(670, 100, image=hi_img, anchor=tkinter.NW)
+
+        time.sleep(2)
+
+        base.canvas.delete(hi_txt)
+
+    threading.Thread(target=say_hi, args=(base,)).start()
 
     category_selection_page(base, temp_assets)
 
